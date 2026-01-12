@@ -35,6 +35,7 @@ services:
 
   dvwa:
     image: vulnerables/web-dvwa:latest
+    platform: linux/amd64
     container_name: lab-dvwa
     ports:
       - "8081:80"
@@ -89,7 +90,11 @@ services:
       - "lab.description=OWASP WebGoat - Guided lessons for web security"
 
   bwapp:
-    build: ./web-apps/bwapp
+    build:
+      context: ./web-apps/bwapp
+      platforms:
+        - linux/amd64
+    platform: linux/amd64
     container_name: lab-bwapp
     ports:
       - "8084:80"
@@ -107,6 +112,7 @@ services:
 
   mutillidae:
     image: citizenstig/nowasp:latest
+    platform: linux/amd64
     container_name: lab-mutillidae
     ports:
       - "8085:80"
@@ -205,21 +211,24 @@ services:
   # FULL OS TARGETS - System Exploitation
   #============================================================================
 
-  metasploitable2:
-    image: tleemcjr/metasploitable2:latest
-    container_name: lab-metasploitable2
-    networks:
-      lab-network:
-        ipv4_address: 172.20.3.10
-    tty: true
-    stdin_open: true
-    privileged: true
-    restart: unless-stopped
-    labels:
-      - "lab.category=os"
-      - "lab.difficulty=advanced"
-      - "lab.name=Metasploitable 2"
-      - "lab.description=Classic vulnerable Linux VM with multiple attack vectors"
+  # Metasploitable2 - Only works on x86_64/amd64 systems (not ARM/Apple Silicon)
+  # Uncomment on Kali Linux or Intel Macs
+  # metasploitable2:
+  #   image: tleemcjr/metasploitable2:latest
+  #   platform: linux/amd64
+  #   container_name: lab-metasploitable2
+  #   networks:
+  #     lab-network:
+  #       ipv4_address: 172.20.3.10
+  #   tty: true
+  #   stdin_open: true
+  #   privileged: true
+  #   restart: unless-stopped
+  #   labels:
+  #     - "lab.category=os"
+  #     - "lab.difficulty=advanced"
+  #     - "lab.name=Metasploitable 2"
+  #     - "lab.description=Classic vulnerable Linux VM with multiple attack vectors"
 
   #============================================================================
   # CUSTOM VULNERABLE SERVICES

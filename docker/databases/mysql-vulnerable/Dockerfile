@@ -1,7 +1,7 @@
 # Vulnerable MySQL Database
 # Weak credentials, plaintext passwords, injectable queries
 
-FROM mysql:5.7
+FROM mysql:8.0
 
 LABEL maintainer="CyberLab"
 LABEL description="MySQL with intentional vulnerabilities for SQL injection practice"
