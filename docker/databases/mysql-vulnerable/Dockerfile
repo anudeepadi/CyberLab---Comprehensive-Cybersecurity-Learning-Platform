@@ -1,10 +1,11 @@
 # Vulnerable MySQL Database
 # Weak credentials, plaintext passwords, injectable queries
 
-FROM mysql:8.0
+# Using MariaDB 10.5 for ARM64 compatibility (MySQL 5.7 not available on ARM)
+FROM mariadb:10.5
 
 LABEL maintainer="CyberLab"
-LABEL description="MySQL with intentional vulnerabilities for SQL injection practice"
+LABEL description="MariaDB with intentional vulnerabilities for SQL injection practice"
 LABEL lab.category="database"
 LABEL lab.difficulty="intermediate"
 

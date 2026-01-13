@@ -34,8 +34,7 @@ services:
   #============================================================================
 
   dvwa:
-    image: vulnerables/web-dvwa:latest
-    platform: linux/amd64
+    build: ./web-apps/dvwa
     container_name: lab-dvwa
     ports:
       - "8081:80"
@@ -43,11 +42,10 @@ services:
       lab-network:
         ipv4_address: 172.20.1.10
     environment:
-      - MYSQL_USER=dvwa
-      - MYSQL_PASSWORD=p@ssw0rd
-      - MYSQL_DATABASE=dvwa
-    volumes:
-      - dvwa-data:/var/lib/mysql
+      - DB_SERVER=127.0.0.1
+      - DB_USER=dvwa
+      - DB_PASSWORD=p@ssw0rd
+      - DB_DATABASE=dvwa
     restart: unless-stopped
     labels:
       - "lab.category=web"
@@ -90,19 +88,13 @@ services:
       - "lab.description=OWASP WebGoat - Guided lessons for web security"
 
   bwapp:
-    build:
-      context: ./web-apps/bwapp
-      platforms:
-        - linux/amd64
-    platform: linux/amd64
+    build: ./web-apps/bwapp
     container_name: lab-bwapp
     ports:
       - "8084:80"
     networks:
       lab-network:
         ipv4_address: 172.20.1.13
-    volumes:
-      - bwapp-data:/var/lib/mysql
     restart: unless-stopped
     labels:
       - "lab.category=web"
@@ -111,8 +103,7 @@ services:
       - "lab.description=Buggy Web Application with 100+ vulnerabilities"
 
   mutillidae:
-    image: citizenstig/nowasp:latest
-    platform: linux/amd64
+    build: ./web-apps/mutillidae
     container_name: lab-mutillidae
     ports:
       - "8085:80"
@@ -209,13 +200,11 @@ services:
 
   #============================================================================
   # FULL OS TARGETS - System Exploitation
+  # NOTE: Metasploitable2 disabled - x86 only, not compatible with ARM64
   #============================================================================
 
-  # Metasploitable2 - Only works on x86_64/amd64 systems (not ARM/Apple Silicon)
-  # Uncomment on Kali Linux or Intel Macs
   # metasploitable2:
   #   image: tleemcjr/metasploitable2:latest
-  #   platform: linux/amd64
   #   container_name: lab-metasploitable2
   #   networks:
   #     lab-network:
@@ -304,8 +293,6 @@ services:
       - "lab.name=Kali Attacker"
 
 volumes:
-  dvwa-data:
-  bwapp-data:
   mysql-vuln-data:
   postgres-vuln-data:
   mongodb-vuln-data:
