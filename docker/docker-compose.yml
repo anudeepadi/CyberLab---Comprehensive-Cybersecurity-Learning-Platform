@@ -46,6 +46,7 @@ services:
       - DB_USER=dvwa
       - DB_PASSWORD=p@ssw0rd
       - DB_DATABASE=dvwa
+      - DEFAULT_SECURITY_LEVEL=low
     restart: unless-stopped
     labels:
       - "lab.category=web"

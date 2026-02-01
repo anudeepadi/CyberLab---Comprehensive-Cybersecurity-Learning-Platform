@@ -1,0 +1,29 @@
+# CSRF (Cross-Site Request Forgery) for DVWA
+# URL: http://localhost:8081/vulnerabilities/csrf/
+
+# The vulnerability:
+# - Password change form has no CSRF token
+# - Any page can submit the password change request
+# - If victim is logged in, password gets changed
+
+# Attack files created:
+# - csrf_attack.html (image-based attack)
+# - csrf_attack2.html (form-based attack)
+
+# To test:
+# 1. Start a web server: python3 -m http.server 9000
+# 2. Log into DVWA in browser
+# 3. Visit http://localhost:9000/csrf_attack.html
+# 4. Password changes to "hacked"
+
+# Attack vectors:
+# - Hidden image tag
+# - Auto-submitting form
+# - Hidden iframe
+# - AJAX request (if CORS allows)
+
+# Real-world impact:
+# - Change victim's email/password
+# - Transfer money
+# - Change settings
+# - Post content as victim

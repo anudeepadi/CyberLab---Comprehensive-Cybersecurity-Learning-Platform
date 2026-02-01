@@ -1,60 +1,45 @@
-# CyberLab - Comprehensive Cybersecurity Learning Platform
+# DVWA Attack Payloads & Tools
 
-A complete, hands-on cybersecurity learning environment with 50+ labs, Docker-based vulnerable systems, and a modern black/white UI.
-
-```
-  ██████╗██╗   ██╗██████╗ ███████╗██████╗ ██╗      █████╗ ██████╗
- ██╔════╝╚██╗ ██╔╝██╔══██╗██╔════╝██╔══██╗██║     ██╔══██╗██╔══██╗
- ██║      ╚████╔╝ ██████╔╝█████╗  ██████╔╝██║     ███████║██████╔╝
- ██║       ╚██╔╝  ██╔══██╗██╔══╝  ██╔══██╗██║     ██╔══██║██╔══██╗
- ╚██████╗   ██║   ██████╔╝███████╗██║  ██║███████╗██║  ██║██████╔╝
-  ╚═════╝   ╚═╝   ╚═════╝ ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝
-```
-
-## Features
-
-- **Modern UI** - Black/white minimalist dashboard built with React + Tailwind
-- **50+ Hands-on Labs** - From beginner to advanced
-- **Docker-based Targets** - DVWA, Juice Shop, WebGoat, Metasploitable2, and more
-- **Isolated Environment** - All attacks stay contained
-- **Progress Tracking** - Track your learning journey
-- **CTF Challenges** - 60+ flags to capture
+Educational resources for practicing web application security with DVWA.
 
 ## 📚 Documentation
 
 - **[QUICK-START.md](QUICK-START.md)** - One-page reference card (After git pull? Start here!)
 - **[GETTING-STARTED.md](GETTING-STARTED.md)** - Complete walkthrough and guide
 - **[NETWORK-LABS-GUIDE.md](NETWORK-LABS-GUIDE.md)** - Network analysis lab details
+- **[DVWA_GUIDE.md](DVWA_GUIDE.md)** - Complete DVWA attack guide with concepts
 
 ## Quick Start
 
-### Prerequisites
-
-- Kali Linux (VM or bare metal)
-- 8GB+ RAM recommended
-- 50GB+ free disk space
-
-### Installation
-
 ```bash
-# Clone or copy to your Kali machine
-cd /path/to/learning
+# Start DVWA
+docker-compose -f docker/docker-compose.yml up -d
 
-# Run the master setup script
-sudo ./setup/master-setup.sh
-
-# Wait for installation (10-20 minutes)
-# All Docker images will be pulled and configured
+# Start payload server (for CSRF, RFI)
+python3 -m http.server 9000
 ```
 
-### Start Learning
+**DVWA Login:** http://localhost:8081 (admin:password)
 
-```bash
-# Start all services
-./tools/scripts/start-all.sh
+## Labs & Payloads
 
-# Open dashboard
-firefox http://localhost/cyberlab/
+| Lab | Files | URL |
+|-----|-------|-----|
+| Brute Force | `payloads/brute_force.txt` | /vulnerabilities/brute/ |
+| Command Injection | `payloads/command_injection.txt` | /vulnerabilities/exec/ |
+| CSRF | `csrf_attack.html`, `csrf_attack2.html` | /vulnerabilities/csrf/ |
+| File Inclusion | `payloads/file_inclusion.txt` | /vulnerabilities/fi/ |
+| File Upload | `shell.php`, `advanced_shell.php`, `shell.gif` | /vulnerabilities/upload/ |
+| SQL Injection | `payloads/sql_injection.txt` | /vulnerabilities/sqli/ |
+| SQL Injection (Blind) | `payloads/sql_injection_blind.txt` | /vulnerabilities/sqli_blind/ |
+| XSS | `payloads/xss_payloads.txt`, `xss_cookie_stealer.html` | /vulnerabilities/xss_* |
+
+## Shell Usage
+
+After uploading `shell.php`:
+```
+http://localhost:8081/hackable/uploads/shell.php?cmd=whoami
+http://localhost:8081/hackable/uploads/shell.php?cmd=cat /etc/passwd
 ```
 
 ## Target Systems
@@ -100,129 +85,6 @@ firefox http://localhost/cyberlab/
 ### Module 08: CTF Challenges (4 labs)
 - Mixed difficulty challenges across all domains
 
-## Directory Structure
-
-```
-learning/
-├── docker/                 # Docker infrastructure
-│   ├── docker-compose.yml  # Main orchestration
-│   ├── web-apps/          # DVWA, bWAPP, etc.
-│   ├── databases/         # Vulnerable databases
-│   └── custom-services/   # SSH, FTP, buffer overflow
-├── ui/                    # React dashboard
-│   └── src/
-├── curriculum/            # Lab documentation
-│   ├── 01-foundations/
-│   ├── 02-network-analysis/
-│   ├── 03-web-security/
-│   └── ...
-├── setup/                 # Installation scripts
-│   ├── master-setup.sh
-│   └── verify-installation.sh
-├── tools/                 # Utilities
-│   ├── progress-tracker/
-│   └── flag-validator/
-├── network-lab-setup.sh   # Existing network labs
-└── NETWORK-LABS-GUIDE.md  # Network labs documentation
-```
-
-## Commands
-
-```bash
-# Start all services
-cd docker && docker-compose up -d
-
-# Stop all services
-docker-compose down
-
-# Check status
-docker ps
-
-# View logs
-docker-compose logs -f [service-name]
-
-# Verify installation
-./setup/verify-installation.sh
-
-# Validate a flag
-python3 tools/flag-validator/validator.py sql-injection-basic 'FLAG{...}'
-```
-
-## Network Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Host Machine (Kali)                       │
-│                                                              │
-│  ┌──────────────────────────────────────────────────────┐   │
-│  │             Docker Network: lab-network               │   │
-│  │                  172.20.0.0/16                        │   │
-│  │                                                       │   │
-│  │   ┌─────────┐  ┌─────────┐  ┌─────────┐             │   │
-│  │   │  DVWA   │  │ Juice   │  │ WebGoat │             │   │
-│  │   │ :8081   │  │ :8082   │  │ :8083   │             │   │
-│  │   └─────────┘  └─────────┘  └─────────┘             │   │
-│  │                                                       │   │
-│  │   ┌─────────┐  ┌─────────┐  ┌─────────┐             │   │
-│  │   │ MySQL   │  │ Redis   │  │ MongoDB │             │   │
-│  │   │ :3307   │  │ :6380   │  │ :27018  │             │   │
-│  │   └─────────┘  └─────────┘  └─────────┘             │   │
-│  │                                                       │   │
-│  │   ┌──────────────┐  ┌───────────────────┐           │   │
-│  │   │ Metasploitable│  │ Buffer Overflow  │           │   │
-│  │   │    :various   │  │     :9999        │           │   │
-│  │   └──────────────┘  └───────────────────┘           │   │
-│  └──────────────────────────────────────────────────────┘   │
-│                                                              │
-│  Dashboard: http://localhost/cyberlab/                       │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## Tips
-
-1. **Start with DVWA** - Best for beginners, set security to LOW
-2. **Use Burp Suite** - Essential for web testing
-3. **Read the guides** - Each lab has detailed walkthroughs
-4. **Take notes** - Document your findings
-5. **Try harder** - Don't look at solutions too quickly
-
-## Troubleshooting
-
-### Services won't start
-```bash
-# Check Docker status
-sudo systemctl status docker
-
-# Check container logs
-docker-compose logs [service-name]
-```
-
-### Port conflicts
-```bash
-# Check what's using a port
-sudo lsof -i :8081
-```
-
-### Reset everything
-```bash
-# Stop and remove all containers
-docker-compose down -v
-
-# Restart
-docker-compose up -d
-```
-
-## Resources
-
-- [OWASP Testing Guide](https://owasp.org/www-project-web-security-testing-guide/)
-- [HackTricks](https://book.hacktricks.xyz/)
-- [GTFOBins](https://gtfobins.github.io/)
-- [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
-
 ## Disclaimer
 
-This platform is for **educational purposes only**. All attacks must be performed within the isolated lab environment. Never attack systems without explicit authorization.
-
----
-
-Happy Hacking! 🔓
+For educational purposes only. Only use on systems you own or have permission to test.
